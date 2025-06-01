@@ -65,6 +65,30 @@ class VideoEncoderListenerTest {
         final var actualMessage = (String) invocationData.getArguments()[0];
         Assertions.assertEquals(expectedMessage, actualMessage);
     }
+    
+    @Test
+    void givenErrorResult_whenCallsListenerAndUseCaseThrowsException_shouldNotProcess() throws InterruptedException {
+        // given
+        final var expectedError = new VideoEncoderError(
+                new VideoMessage("123", "abc"),
+                "Video not found"
+        );
+
+        final var expectedMessage = Json.writeValueAsString(expectedError);
+
+        // when
+        this.rabbitTemplate.convertAndSend(queueProperties.getQueue(), expectedMessage);
+
+        // then
+        final var invocationData =
+                harness.getNextInvocationDataFor(VideoEncoderListener.LISTENER_ID, 1, TimeUnit.SECONDS);
+
+        Assertions.assertNotNull(invocationData);
+        Assertions.assertNotNull(invocationData.getArguments());
+
+        final var actualMessage = (String) invocationData.getArguments()[0];
+        Assertions.assertEquals(expectedMessage, actualMessage);
+    }
 
     @Test
     void givenCompletedResult_whenCallsListener_shouldCallUseCase() throws InterruptedException {

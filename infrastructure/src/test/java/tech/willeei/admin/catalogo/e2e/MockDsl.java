@@ -25,7 +25,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public interface MockDsl {
@@ -183,7 +185,14 @@ public interface MockDsl {
         return this.mvc().perform(aRequest);
     }
 
-    private ResultActions list(final String url, final int page, final int perPage, final String search, final String sort, final String direction) throws Exception {
+    private ResultActions list(
+            final String url,
+            final int page,
+            final int perPage,
+            final String search,
+            final String sort,
+            final String direction
+    ) throws Exception {
         final var aRequest = get(url)
                 .with(ApiTest.VIDEOS_JWT)
                 .queryParam("page", String.valueOf(page))

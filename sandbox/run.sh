@@ -2,7 +2,7 @@
 docker network create adm_videos_services
 docker network create elastic
 
-# Criar as pastas com permiss?es
+# Criar as pastas com permissões
 sudo chown root app/filebeat/filebeat.docker.yml
 mkdir -m 777 .docker
 mkdir -m 777 .docker/es01
